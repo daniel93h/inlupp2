@@ -25,6 +25,7 @@ struct tree
   key_free_fun key_free;
   element_free_fun elem_free;
   element_comp_fun elem_comp_fun;
+  
   node_t *root;
 };
 
@@ -96,9 +97,37 @@ tree_t *tree_new(element_copy_fun element_copy, key_free_fun key_free, element_f
   return temp;
 }
 
+void tree_delete_aux(key_free_fun free_key, element_free_fun free_elem, node_t **node, bool delete_keys, bool delete_elements)
+{
+  if(*node!=NULL)
+    {
+      if((*node)->left != NULL)
+        {
+          tree_delete_aux(free_key, free_elem, &(*node)->left, delete_keys, delete_elements);
+        }
+      if((*node)->right != NULL)
+        {
+          tree_delete_aux(free_key, free_elem, &(*node)->right, delete_keys, delete_elements);
+        }
+      if(*node != NULL)
+        {
+          if(delete_keys)
+            {
+              free_key((*node)->key);
+            }
+          if(delete_elements)
+            {
+              free_elem((*node)->elem);
+            }
+          free(node);
+        }
+    }
+}
+
 void tree_delete(tree_t *tree, bool delete_keys, bool delete_elements)
 {
-  return;
+  tree_delete_aux(tree->key_free, tree->elem_free, &tree->root, delete_keys, delete_elements);
+  free(tree);
 }
 
 int tree_size_r(node_t *node)
@@ -203,9 +232,72 @@ bool tree_get(tree_t *tree, tree_key_t key, elem_t *result)
   return true;
 }
 
+
+node_t **last_node(node_t **node)
+{
+  if((*node)->right==NULL&&(*node)->left==NULL)
+    {
+      return node;
+    }
+  else if((*node)->right==NULL)
+    {
+      return last_node(&(*node)->left);
+    }
+  else if((*node)->left==NULL)
+    {
+      return last_node(&(*node)->right);
+    }
+  return false;
+}
+
+bool tree_remove_aux(element_comp_fun key_comp, key_free_fun key_free, node_t **node_for_removal, elem_t *result)
+{
+  if((*node_for_removal)->left==NULL&&(*node_for_removal)->right==NULL)
+    {
+      *result=(*node_for_removal)->elem;
+      key_free((*node_for_removal)->key);
+      free(node_for_removal);
+      (*node_for_removal) = NULL;
+      return true;
+    }
+  else if((*node_for_removal)->right==NULL)
+    {
+      *result=(*node_for_removal)->elem;
+      key_free((*node_for_removal)->key);
+      node_t *temp_pointer = (*node_for_removal)->left;
+      free(node_for_removal);
+      (*node_for_removal)=temp_pointer;
+      return true;
+    }
+  else if((*node_for_removal)->left==NULL)
+    {
+      *result=(*node_for_removal)->elem;
+      key_free((*node_for_removal)->key);
+      node_t *temp_pointer = (*node_for_removal)->right;
+      free(node_for_removal);
+      (*node_for_removal)=temp_pointer;
+      return true;
+    }
+  else
+    {
+      *result=(*node_for_removal)->elem;
+      node_t **temp = last_node(&(*node_for_removal)->right);
+      key_free((*node_for_removal)->key);
+      (*node_for_removal)->key=(*temp)->key;
+      (*node_for_removal)->elem=(*temp)->elem;
+      (*temp) = NULL;
+      return true;
+    }
+}
+
 bool tree_remove(tree_t *tree, tree_key_t key, elem_t *result)
 {
-  return true;
+  if(tree_has_key(tree, key))
+    {
+      node_t **node_for_removal = get_parents_pointer(tree,key);
+      return tree_remove_aux(tree->elem_comp_fun, tree->key_free, node_for_removal, result); 
+    }
+  return false;
 }
 
 
@@ -256,28 +348,67 @@ elem_t *tree_elements(tree_t *tree)
   return elem_array;
 }
 
+bool tree_apply_r(node_t *node, enum tree_order order, key_elem_apply_fun func, void *data)
+{
+  if (node != NULL)
+    {
+      bool result = false;
+      if (order == -1) //pre-order
+        {
+          result = result || func(node->key, node->elem, data);
+          if(node->left !=NULL)
+            {
+              result = result || tree_apply_r(node->left,  order, func, data);
+            }
+          if(node->right !=NULL)
+            {
+              result = result || tree_apply_r(node->right, order, func, data);
+            }
+          return result;
+        }
+      else if (order == 0) //in-order
+        {
+
+          if(node->left !=NULL)
+            {
+              result = result || tree_apply_r(node->left,  order, func, data);
+            }
+          result = result || func(node->key, node->elem, data);
+          if(node->right !=NULL)
+            {
+              result = result || tree_apply_r(node->right, order, func, data);
+            }
+          return result;
+        }
+      else // order == 1, post-order
+        {
+          if(node->left !=NULL)
+            {
+              result = result || tree_apply_r(node->left,  order, func, data);
+            }
+          if(node->right !=NULL)
+            {
+              result = result || tree_apply_r(node->right, order, func, data);
+            }
+          result = result || func(node->key, node->elem, data);
+          return result;
+        }
+    }
+  else{return false;}
+}
+
 bool tree_apply(tree_t *tree, enum tree_order order, key_elem_apply_fun fun, void *data)
 {
-  return true;
+  return tree_apply_r(tree->root,order,fun,data);
 }
-<<<<<<< HEAD
+
 
 /*
 int main()
 {
-=======
-/*
-  int main()
-  {
->>>>>>> 8758dd58d6dfa15124061e60598df96d77d57870
-  tree_t *test= tree_new(NULL, NULL, NULL, NULL);
-  printf("%d\n", tree_size(test));
-  puts("hej");
   return 0;
-<<<<<<< HEAD
-}
-*/
-=======
-  }*/
+  
+}          
 
->>>>>>> 8758dd58d6dfa15124061e60598df96d77d57870
+*/
+
