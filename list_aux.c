@@ -1,4 +1,3 @@
-//Här lägger vi alla funktioner som vi brutit ut ur funktionerna i list.c
 #include "common.h"
 #include "list.h"
 #include "list_aux.h"

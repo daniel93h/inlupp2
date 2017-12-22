@@ -4,6 +4,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "tree.h"
+#include "tree_aux.h"
+
+typedef elem_t tree_key_t;
+typedef element_free_fun key_free_fun;
+typedef struct tree tree_t;
+typedef struct node node_t;
 
 struct node
 {
@@ -14,24 +20,16 @@ struct node
 };
 typedef struct node node_t;
 
-/*
-  struct representing a binary search tree
-  root is root node
-  size is number of nodes in tree
-*/
-struct tree
-{
+struct tree 
+{ 
+  node_t *root;
   element_copy_fun elem_copy;
   key_free_fun key_free;
   element_free_fun elem_free;
   element_comp_fun elem_comp_fun;
-  
-  node_t *root;
 };
 
-typedef elem_t tree_key_t;
-typedef element_free_fun key_free_fun;
-typedef struct tree tree_t;
+
 
 
 
@@ -154,43 +152,16 @@ int tree_size(tree_t *tree)
   
   Returns depth of the tree with given node as root
 */
-int tree_depth_r(node_t *node)
-{
-  // Base case: reaching bottom node
-  if (node == NULL)
-    {
-      return 0;
-    }
-  
-  int depth_r = tree_depth_r(node->right);
-  int depth_l = tree_depth_r(node->left);
-  if (depth_r > depth_l)
-    {
-      return 1 + depth_r;
-    }
-  else
-    {
-      return 1 + depth_l;
-    }
-}
+
 
 
 int tree_depth(tree_t *tree)
 {
-  return tree_depth_r(tree->root);
+  return tree_depth_aux(tree->root);
 }
 
 
 // Returns a new node with given key and element and with no children.
-node_t *new_node(elem_t key, elem_t elem)
-{
-  node_t *new = malloc(sizeof(node_t));
-  new->left = NULL;
-  new->right = NULL;
-  new->key = key;
-  new->elem = elem;
-  return new;
-}
 
 
 bool tree_insert(tree_t *tree, tree_key_t key, elem_t elem)

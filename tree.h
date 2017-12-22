@@ -9,7 +9,7 @@ typedef element_free_fun key_free_fun;
 
 /// Define struct tree in your .c file not here! (why?)
 typedef struct tree tree_t;
-
+typedef struct node node_t;
 /// Creates a new tree
 ///
 /// \param copy (may be NULL) a function applied to all elements when stored in the tree

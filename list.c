@@ -174,7 +174,7 @@ int list_length_rec(list_t *list)
 {
   if(list == NULL)
     {
-      return list_length_rec_aux(list->first)
+      return list_length_rec_aux(list->first);
     }
 }
 
@@ -204,25 +204,39 @@ void list_delete(list_t *list, bool delete)
 
 bool list_apply(list_t *list, elem_apply_fun fun, void *data)
 {
-  /* int index=0;
-  int index_step=0;
-  while(list_length(list)>index_step)
-    {
-      fun(,data);
-      }*/
+  bool apply = false;
+  link_t *current = list->first;
+  while(current->next != NULL){
+    apply = fun(current->elem, data);
+    current = current->next;
+    if(apply != false){
+      return apply;
+    }
+  }
   return true;
 }
 
 int list_contains(list_t *list, elem_t elem)
 {
-  return 0;
-}
-
-
-int main()
-{
-  list_t *list = list_new(NULL,NULL,NULL);
-  elem_t a = 1;
-  list_append(list, 1);
-  return 0;
+  int index = 0;
+  link_t *current = list->first;
+  /* if(list->compare == NULL){
+    while(current != NULL){
+      if((current->elem).p == elem.p){
+        return index;
+      }
+      current = current->next;
+      index++;
+    } return -1;
+    }*/
+  //  else{
+    while(current != NULL){
+      if(list->compare(current->elem, elem)==0){
+        return index;
+      }
+      current = current->next;
+      index++;
+    }
+    // }
+  return -1;
 }
