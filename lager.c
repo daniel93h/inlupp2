@@ -305,7 +305,7 @@ item_t *make_item(char *name, char *desc, int price, char *shelf_name, int amoun
   return new_item;
 }
 
-<<<<<<< HEAD
+
 bool list_has_shelf(list_t *shelves, elem_t shelf)
 {
   return (list_contains(shelves, shelf) != -1);
@@ -331,29 +331,9 @@ bool shelf_exists(tree_t *tree, elem_t shelf)
 }
 
 
-=======
-  
-//returns true if a shelf in the provided tree has the same name as the provided char shelfname
-//else returns false
-bool shelf_exists(tree_t *tree, elem_t *shelfname)
-{
-  elem_t *lists=tree_elements(tree); 
-  for(int i = 0; i < tree_size(tree); ++i)
-    {
 
-      elem_t item = lists[i];
-      list_t *shelf = ((item_t *) item.p)->shelves;
-      if(list_contains(shelf, *shelfname))
-        {
-          //free(lists);
-          return true;
-        }
-    }
-  //free(lists);
-  return false;
-}
 
->>>>>>> 681679843624030f83ab93b03b4f691ade711910
+
 /*
   Return true if item with specified name has shelf with specified name
   If item with specified name does not exist, returns false
@@ -415,11 +395,8 @@ void edit_before_adding(char *item_name, char *desc, int *price, char *shelf, in
           elem_t *new_name =malloc(sizeof(elem_t));
           new_name->p = ask_question_shelf("Välj ny hylla");
           // New shelf must not be used anywhere else, except in item with same name
-<<<<<<< HEAD
+
           while(shelf_exists(tree, *new_name) && !item_has_shelf(tree, (elem_t *)item_name, new_name->p))
-=======
-          while(shelf_exists(tree, new_name) && !item_has_shelf(tree, (elem_t *)item_name, new_name->p))
->>>>>>> 681679843624030f83ab93b03b4f691ade711910
             {
               new_name->p = ask_question_shelf("Den hyllan används redan!\nSkriv det nya hyllnamnet");
             }
@@ -474,17 +451,11 @@ void add_goods(tree_t *tree, action_t *act)
    if(item_exists)
      {
        shelf_name->p = ask_question_shelf("Skriv hylla att lägga varan på:");
-<<<<<<< HEAD
+
        if(shelf_exists(tree, *shelf_name))
          {
            // If shelf is not used by this item, and already exists, we have to ask for another one
            while(get_shelf_in_list(existing_item->shelves, shelf_name->p)==NULL && shelf_exists(tree, *shelf_name))
-=======
-       if(shelf_exists(tree, shelf_name))
-         {
-           // If shelf is not used by this item, and already exists, we have to ask for another one
-           while(get_shelf_in_list(existing_item->shelves, shelf_name->p)==NULL && shelf_exists(tree, shelf_name))
->>>>>>> 681679843624030f83ab93b03b4f691ade711910
              {
                puts("Den hyllan används redan av en annan vara!");
                shelf_name->p = ask_question_shelf("Skriv hylla att lägga varan på:");
@@ -494,11 +465,7 @@ void add_goods(tree_t *tree, action_t *act)
    else
      {
        shelf_name->p = ask_question_shelf("Skriv hyllan att lägga varan på:");
-<<<<<<< HEAD
        while(shelf_exists(tree, *shelf_name))
-=======
-       while(shelf_exists(tree, shelf_name))
->>>>>>> 681679843624030f83ab93b03b4f691ade711910
          {
            puts("Den hyllan används redan av en annan vara!");
            shelf_name->p = ask_question_shelf("Skriv hylla att lägga varan på:");
@@ -545,22 +512,11 @@ void add_goods(tree_t *tree, action_t *act)
       elem_t insert_item_key;
       insert_item.p = existing_item;
       insert_item_key.p = existing_item->name;
-<<<<<<< HEAD
 
       
       tree_insert(tree, insert_item_key, insert_item);
       
-=======
-      elem_t *test_item = malloc(sizeof(elem_t));
-      elem_t test_key;
-      test_key.p="a";
 
-      
-      tree_insert(tree, insert_item_key, insert_item);
-
-      tree_get(tree, test_key, test_item);
-
->>>>>>> 681679843624030f83ab93b03b4f691ade711910
     }
   //Otherwise add amount to new or existing shelf.
   else

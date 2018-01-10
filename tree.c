@@ -204,12 +204,9 @@ bool tree_insert(tree_t *tree, tree_key_t key, elem_t elem)
     {
       if(tree->elem_copy==NULL)
         {
-<<<<<<< HEAD
+
           *node_p_p = new_node(NULL, NULL, key, elem);
-=======
-          *node_p_p = new_node(key, elem);
-          
->>>>>>> 681679843624030f83ab93b03b4f691ade711910
+
           return true;
         }
       else
@@ -322,10 +319,6 @@ void tree_keys_r(node_t *node, tree_key_t **result)
       
       **result = node->key;
       ++(*result); //Need to increment pointer, since we added an element
-<<<<<<< HEAD
-=======
-      printf("aaaaaaaaaaaaaaaaaaaa%s\n", (char*)node->key.p);
->>>>>>> 681679843624030f83ab93b03b4f691ade711910
       tree_keys_r(node->right, result);
     }
 }
