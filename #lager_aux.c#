@@ -118,6 +118,14 @@ char ask_question_char(char *question, char *answers)
   return svar;
 }
 
+//void print_goods()
+//{}
+
+char *ask_question_string(char *question)
+{
+  return ask_question(question, not_empty, (convert_func) strdup).s;
+}
+
 bool is_shelf(char *str)
 {
   int len = (strlen(str));
@@ -142,13 +150,6 @@ char *ask_question_shelf(char *question)
   char *temp = ask_question(question, is_shelf, (convert_func) strdup).s;
   return temp;
 }
-
-char *ask_question_string(char *question)
-{
-  return ask_question(question, not_empty, (convert_func) strdup).s;
-}
-
-
 
 int ask_question_int(char *question)
 {

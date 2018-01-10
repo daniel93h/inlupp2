@@ -195,12 +195,14 @@ node_t *new_node(elem_t key, elem_t elem)
 
 bool tree_insert(tree_t *tree, tree_key_t key, elem_t elem)
 {
+
   node_t **node_p_p = get_parents_pointer(tree, key);
   if (*node_p_p == NULL) // Parent's pointer is NULL => node does not exist already.
     {
       if(tree->elem_copy==NULL)
         {
           *node_p_p = new_node(key, elem);
+          
           return true;
         }
       else
@@ -228,7 +230,7 @@ bool tree_get(tree_t *tree, tree_key_t key, elem_t *result)
     {
       return false;
     }
-  result = &node_pointer->elem;
+  *result = (*node_pointer).elem;
   return true;
 }
 
@@ -250,7 +252,7 @@ node_t **last_node(node_t **node)
   return false;
 }
 
-bool tree_remove_aux(element_comp_fun key_comp, key_free_fun key_free, node_t **node_for_removal, elem_t *result)
+bool tree_remove_aux(key_free_fun key_free, node_t **node_for_removal, elem_t *result)
 {
   if((*node_for_removal)->left==NULL&&(*node_for_removal)->right==NULL)
     {
@@ -295,7 +297,7 @@ bool tree_remove(tree_t *tree, tree_key_t key, elem_t *result)
   if(tree_has_key(tree, key))
     {
       node_t **node_for_removal = get_parents_pointer(tree,key);
-      return tree_remove_aux(tree->elem_comp_fun, tree->key_free, node_for_removal, result); 
+      return tree_remove_aux(tree->key_free, node_for_removal, result); 
     }
   return false;
 }
@@ -313,7 +315,7 @@ void tree_keys_r(node_t *node, tree_key_t **result)
       
       **result = node->key;
       ++(*result); //Need to increment pointer, since we added an element
-
+      printf("aaaaaaaaaaaaaaaaaaaa%s\n", (char*)node->key.p);
       tree_keys_r(node->right, result);
     }
 }
