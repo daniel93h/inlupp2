@@ -26,7 +26,7 @@ struct list
 
 /*
   if (list->free) {
-    list->free(current->elem);
+  list->free(current->elem);
   }
   free(current)
 */
@@ -88,8 +88,8 @@ void list_append(list_t *list, elem_t elem)
     }
   else
     {
-  list->last->next = new_elem;
-  list->last = new_elem;
+      list->last->next = new_elem;
+      list->last = new_elem;
     }
   list->length++;
 }
@@ -174,7 +174,7 @@ int list_length_rec(list_t *list)
 {
   //if(list == NULL)
   //  {
-      return list_length_rec_aux(list->first);
+  return list_length_rec_aux(list->first);
   //  }
 }
 
@@ -193,39 +193,51 @@ void list_delete(list_t *list, bool delete)
   free(list);
 }
 
-/*void list_delete(list_t *list, bool delete)
-{
-  while(list_length(list)!=0)
-    {
-      list_remove(list,0,delete);
-    }
-  free(list);
-  }*/
-
 bool list_apply(list_t *list, elem_apply_fun fun, void *data)
 {
-  /* int index=0;
-  int index_step=0;
-  while(list_length(list)>index_step)
+  bool apply = false;
+  link_t *current = list->first;
+  while(current->next != NULL)
     {
-      fun(,data);
-      }*/
+    apply = fun(current->elem, data);
+    current = current->next;
+    if(apply != false)
+      {
+        return apply;
+      }
+    }
   return true;
 }
 
-<<<<<<< HEAD
-
-int list_contains(list_t *list, elem_t elem)
-=======
 int list_contains(list_t *list, elem_t elem)
 {
-  return 0;
+  link_t *cursor = list->first;
+  if(list->compare != NULL)
+    {
+      for (int i = 0; i < list->length && cursor; ++i)
+        {
+          if(list->compare((cursor)->elem, elem) != 0)
+            {
+              cursor = cursor->next;     
+            }
+          else
+            {
+              return i;
+            }
+        }
+      return -1;
+    }
+  for (int i = 0; i < list->length && cursor; ++i)
+    {
+      if(cursor->elem.i == elem.i)
+        {
+          return i;
+        }
+      else
+        {
+          cursor = cursor->next;
+        }
+    }
+  return -1; 
 }
 
-/*
-int main()
->>>>>>> 681679843624030f83ab93b03b4f691ade711910
-{
-  return -1;
-}
-*/
