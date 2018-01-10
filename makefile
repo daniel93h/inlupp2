@@ -52,6 +52,7 @@ tree_aux.o: tree_aux.c tree_aux.h
 	$(CC) $(FLAGS) -c tree_aux.c
 
 clean:
+	rm -f *#
 	rm -f *.o
 	rm -f *~
 
