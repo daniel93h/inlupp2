@@ -3,9 +3,8 @@
 #include "list.h"
 #include "tree.h"
 #include <string.h>
-#include "item.h"
-
-typedef struct item item_t;
+#include "lager.h"
+ 
 typedef struct shelf shelf_t;
 
 struct shelf
@@ -15,15 +14,15 @@ struct shelf
 };
 
 
-/*
+
 struct item
 
 {
   char *name;
-  char *description;
+  char *desc;
   int price;
-  list_t *storage;
-  };*/
+  list_t *shelves;
+  };
 
   
 
@@ -39,7 +38,7 @@ bool save_item_to_file(tree_key_t key, elem_t elem, void *file_pointer)//Sparar 
     }
   FILE *file = file_pointer;
   item_t *item = elem.p;
-  int length =list_length(item->storage);
+  int length =list_length(item->shelves);
   elem_t shelfelem;
   shelf_t *tmpshelf;
 
@@ -91,10 +90,10 @@ tree_t *read_file(tree_t *tree, FILE *fptr)
 
     if(read == -1)
       {
-        free(name);
-        free(desc);
-        free(intstring);
-        free(shelfname);
+        //free(name);
+        //free(desc);
+        //free(intstring);
+        //free(shelfname);
         return tree; 
   
       }
@@ -125,8 +124,8 @@ tree_t *read_file(tree_t *tree, FILE *fptr)
         shelf->amount = amount;
         elem_t element = {.p = shelf};
         list_append(shelves, element);
-        free(shelf->name);
-        free(shelf);
+        //free(shelf->name);
+        //free(shelf);
       }
   
     item_t *item = make_item(strdup(name), strdup(desc), price, strdup(shelfname), amount); //Skapar en ny vara med all indata.   

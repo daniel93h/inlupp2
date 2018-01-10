@@ -352,7 +352,7 @@ elem_t *tree_elements(tree_t *tree)
   tree_elements_r(tree->root, &cursor);
   return elem_array;
 }
-
+/*
 bool tree_apply_r(node_t *node, enum tree_order order, key_elem_apply_fun func, void *data)
 {
   if (node != NULL)
@@ -406,6 +406,56 @@ bool tree_apply(tree_t *tree, enum tree_order order, key_elem_apply_fun fun, voi
 {
   return tree_apply_r(tree->root,order,fun,data);
 }
+*/
+
+void tree_apply_aux(node_t *root, enum tree_order order, key_elem_apply_fun fun, void *data, bool *result)
+{
+
+  if(root == NULL)
+    {
+      return;
+    }
+  else if(order == 0)
+    {
+      tree_apply_aux(root->left, order, fun, data, result);
+      if(fun(root->key, root->elem, data))
+        {
+          *result = true;
+        }
+      tree_apply_aux(root->right, order, fun, data, result);
+       
+    }
+  else if(order == -1)
+    {
+      if(fun(root->key, root->elem, data))
+        {
+          *result = true;
+        }
+      tree_apply_aux(root->left, order, fun, data, result);
+      tree_apply_aux(root->right, order, fun, data, result);
+      return;
+    }
+  else if(order == 1)
+    {
+      
+      tree_apply_aux(root->left, order, fun, data, result);
+      tree_apply_aux(root->right, order, fun, data, result);
+      if(fun(root->key, root->elem, data))
+        {
+          *result = true;
+        }
+      return;
+    }
+  
+}
+
+bool tree_apply(tree_t *tree, enum tree_order order, key_elem_apply_fun fun, void *data)
+{
+  bool result = false;
+  tree_apply_aux(tree->root, order, fun, data, &result);
+  return result;
+}
+
 
 
 /*

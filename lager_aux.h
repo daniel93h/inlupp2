@@ -10,6 +10,7 @@ typedef union
   float f;
   char *s;
 }answer_t;
+
 typedef bool(*check_func)(char*);
 typedef answer_t(*convert_func)(char*);
 

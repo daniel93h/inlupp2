@@ -9,16 +9,15 @@
 #include "tree.h"
 #include "list.h"
 #include "common.h"
+#include "fileman.h"
 
-
-
-typedef struct item item_t;
-struct item {
+typedef struct item
+{
     char *name;
     char *desc;
     int price;
     list_t *shelves;
-};
+}item_t;
 
 struct shelf {
   char *name;
@@ -581,7 +580,7 @@ void main_menu()
 
 
 
-void event_loop(tree_t *tree)
+void event_loop(tree_t *tree, char *filename)
 {
   char val;
   action_t *act = malloc(sizeof(struct action));
@@ -632,10 +631,12 @@ Vad vill du göra?", "LTRGHASK");
         }
     }
   while (val != 'A');
+  save_tree(tree, filename);
+  tree_delete(tree, false, true);
 }
 
 
-int main(void)
+int main(int argc, char* argv[])
 {
   tree_t *tree = tree_new(element_copy, free_key ,free_elem,key_compare);//för o kunna fixa loop
 
@@ -644,9 +645,9 @@ int main(void)
   printf("printed %d strings\n", list_20_strings(ar, 0, 2));
   exit(0);
   */
+  load_tree(tree, argv[1]);
   puts("Välkommen till lagerhantering");
   puts("==============================");
-  event_loop(tree);
-  
+  event_loop(tree, argv[1]);
   return 0;
 }
