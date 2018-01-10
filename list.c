@@ -47,6 +47,7 @@ list_t *list_new(element_copy_fun copy, element_free_fun free, element_comp_fun 
   new_list->copy = copy ? copy : list_no_copy;
   new_list->free = free ? free : list_no_free;
   new_list->compare = compare;
+  new_list->length = 0;
   return new_list;
 }
 
@@ -161,22 +162,6 @@ int list_length_iter(list_t *list)
   return count;
 }
 
-int list_length_rec_aux(link_t *link)
-{
-  if(link == NULL)
-    {
-      return 0;
-    }
-  return 1 + list_length_rec_aux(link->next);
-}
-
-int list_length_rec(list_t *list)
-{
-  //if(list == NULL)
-  //  {
-  return list_length_rec_aux(list->first);
-  //  }
-}
 
 int list_length(list_t *list)
 {  

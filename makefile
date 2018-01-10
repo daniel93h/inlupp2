@@ -11,6 +11,7 @@ clean:
 	rm -f *#
 	rm -f *.o
 	rm -f *~
+	rm -f *.out
 
 filecomp: clean
 	$(CC) $(FLAGS) lager.c lager_aux.c list.c list_aux.c tree.c tree_aux.c fileman.c 

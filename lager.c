@@ -67,13 +67,13 @@ void print_shelves(list_t *shelves) {
     for (int i = 0; i < list_length(shelves); i++){
       shelf_t *shelf = malloc(sizeof(shelf_t));
         
-      elem_t get_elem;
+      elem_t *get_elem =malloc(sizeof(elem_t));
         
-      get_elem.p = shelf;
+      get_elem->p = shelf;
         
-      list_get(shelves, i, &get_elem);
+      list_get(shelves, i, get_elem);
         
-      shelf_t *shelf_printer = ((shelf_t*)get_elem.p);
+      shelf_t *shelf_printer = ((shelf_t*)get_elem->p);
         
       printf("%s (%d st), ", shelf_printer->name, shelf_printer->amount);
 
@@ -101,6 +101,7 @@ void print_item(elem_t item)
 */
 shelf_t *get_shelf_in_list(list_t *list, char *shelf_name)
 {
+  
   int len = list_length(list);
   shelf_t *shelf =malloc(sizeof(shelf_t));
   for(int i=0; i < len; ++i)
@@ -399,6 +400,7 @@ void edit_before_adding(char *item_name, char *desc, int *price, char *shelf, in
             {
               new_name->p = ask_question_shelf("Den hyllan används redan!\nSkriv det nya hyllnamnet");
             }
+          
           strcpy(shelf, new_name->p);
           puts("Ny hylla vald");
           break;
@@ -426,10 +428,11 @@ void add_goods(tree_t *tree, action_t *act)
   char *desc;
   int price;
   item_t *existing_item = malloc(sizeof(item_t));
-  elem_t *shelf_name= malloc(sizeof(item_t));
+  elem_t *existing_elem = malloc(sizeof(elem_t));
+  elem_t *shelf_name= malloc(sizeof(elem_t));
   //First get item name, description and price.
   //If item exists, we get from db, otherwise ask for it.
-  elem_t *item_name= malloc(sizeof(item_t));
+  elem_t *item_name= malloc(sizeof(elem_t));
   item_name->p = ask_question_string("Skriv varans namn:");
   if (tree_has_key(tree, *item_name) == false)
     {
@@ -441,9 +444,9 @@ void add_goods(tree_t *tree, action_t *act)
     {
       item_exists = true;
       printf("'%s' finns redan, använder samma beskrivning och pris\n", (char*)item_name->p);
-      tree_get(tree, *item_name, (elem_t*)existing_item);
-      desc  = existing_item->desc;
-      price = existing_item->price;
+      tree_get(tree, *item_name, existing_elem);
+      desc  = ((item_t *)existing_elem->p)->desc;
+      price = ((item_t *)existing_elem->p)->price;
     }
 
   //Get shelf to store on and amount to store
@@ -520,9 +523,9 @@ void add_goods(tree_t *tree, action_t *act)
   //Otherwise add amount to new or existing shelf.
   else
     {
-      act->copy=make_copy(existing_item);
-
-      shelf_t *shelf = get_shelf_in_list(existing_item->shelves, shelf_name->p);
+      //act->copy=make_copy(existing_item);
+      
+      shelf_t *shelf = get_shelf_in_list(((item_t*)existing_elem->p)->shelves, shelf_name->p);
       if (shelf == NULL)
         {
           shelf_t *new_shelf=malloc(sizeof(shelf_t));
@@ -530,13 +533,14 @@ void add_goods(tree_t *tree, action_t *act)
           new_shelf->amount=amount;
           elem_t shelf_insert;
           shelf_insert.p=new_shelf;
-          list_append(existing_item->shelves, shelf_insert);
+          printf("%s\n", ((shelf_t*)shelf_insert.p)->name);
+          list_append(((item_t*)existing_elem->p)->shelves, shelf_insert);
         }
       else
         {
           shelf->amount += amount;
         }
-      act->merch=existing_item;
+      //act->merch=existing_item;
     }
 }
 
