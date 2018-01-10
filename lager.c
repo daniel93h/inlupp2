@@ -636,7 +636,7 @@ Vad vill du göra?", "LTRGHASK");
     }
   while (val != 'A');
   save_tree(tree, filename);
-  tree_delete(tree, false, true);
+  //tree_delete(tree, false, true);           ....................Will leak without this. But has to be fixed
 }
 
 

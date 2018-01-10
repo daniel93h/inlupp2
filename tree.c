@@ -96,9 +96,39 @@ tree_t *tree_new(element_copy_fun element_copy, key_free_fun key_free, element_f
   return temp;
 }
 
+void tree_delete_aux(node_t *node, bool delete_keys, bool delete_elements, key_free_fun key_free, element_free_fun elem_free)
+{
+  if(node == NULL)
+    {
+      return;
+    }
+  else
+    {
+      tree_delete_aux(node->right,delete_keys,delete_elements,key_free,elem_free);
+      tree_delete_aux(node->left,delete_keys,delete_elements,key_free,elem_free);
+      if(delete_elements && elem_free)
+        {
+          elem_free(node->elem);
+        }
+      if(delete_keys && key_free)
+        {
+          key_free(node->key);
+        }
+      free(node);
+    }
+}
+
+
+
+void tree_delete(tree_t *tree, bool delete_keys, bool delete_elements)
+{
+  tree_delete_aux(tree->root, delete_keys, delete_elements, *tree->key_free, *tree->elem_free);
+}
+
+/*
 void tree_delete_aux(key_free_fun free_key, element_free_fun free_elem, node_t **node, bool delete_keys, bool delete_elements)
 {
-  if(*node!=NULL)
+  if(node!=NULL)
     {
       if((*node)->left != NULL)
         {
@@ -121,13 +151,14 @@ void tree_delete_aux(key_free_fun free_key, element_free_fun free_elem, node_t *
           free(node);
         }
     }
-}
+    }
+
 
 void tree_delete(tree_t *tree, bool delete_keys, bool delete_elements)
 {
   tree_delete_aux(tree->key_free, tree->elem_free, &tree->root, delete_keys, delete_elements);
   free(tree);
-}
+  }*/
 
 int tree_size_r(node_t *node)
 {
