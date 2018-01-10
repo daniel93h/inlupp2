@@ -50,7 +50,6 @@ node_t **get_parents_pointer_r(node_t **parents_pointer, elem_t *key, element_co
       return parents_pointer;
     }
   
-
   // We can determine if node is in left or right subtree
   // by comparing the given key with the current node's key
   int comp = compare(*key, (*parents_pointer)->key);
@@ -136,9 +135,10 @@ int tree_size_r(node_t *node)
     {
       return 0;
     }
-  int left_count = 1 + tree_size_r(node->left);
-  int right_count = 1 + tree_size_r(node->right);
-  return left_count + right_count;
+  else {
+    return 1 + tree_size_r(node->left) + tree_size_r(node->right);
+  }
+
 }
 
 int tree_size(tree_t *tree)
@@ -182,30 +182,33 @@ int tree_depth(tree_t *tree)
 
 
 // Returns a new node with given key and element and with no children.
-node_t *new_node(elem_t key, elem_t elem)
-{
-  node_t *new = malloc(sizeof(node_t));
-  new->left = NULL;
-  new->right = NULL;
-  new->key = key;
-  new->elem = elem;
-  return new;
+node_t *new_node(node_t *left, node_t *right, tree_key_t key, elem_t elem){
+  node_t *n = malloc(sizeof(node_t));
+  n->left = left;
+  n->right = right;
+  n->key = key;
+  n->elem = elem;
+  return n;
 }
-
 
 bool tree_insert(tree_t *tree, tree_key_t key, elem_t elem)
 {
   node_t **node_p_p = get_parents_pointer(tree, key);
+  if (tree->root == NULL)
+    {
+      tree->root = new_node(NULL, NULL, key, elem);
+      return true;
+    }
   if (*node_p_p == NULL) // Parent's pointer is NULL => node does not exist already.
     {
       if(tree->elem_copy==NULL)
         {
-          *node_p_p = new_node(key, elem);
+          *node_p_p = new_node(NULL, NULL, key, elem);
           return true;
         }
       else
         {
-          *node_p_p = new_node(key, tree->elem_copy(elem));
+          *node_p_p = new_node(NULL,NULL,key, tree->elem_copy(elem));
           return true;
         }
     }
@@ -213,7 +216,7 @@ bool tree_insert(tree_t *tree, tree_key_t key, elem_t elem)
     {
       return false;
     }
-}
+  }
 
 bool tree_has_key(tree_t *tree, tree_key_t key)
 {
@@ -228,7 +231,7 @@ bool tree_get(tree_t *tree, tree_key_t key, elem_t *result)
     {
       return false;
     }
-  result = &node_pointer->elem;
+  *result = (*node_pointer).elem;
   return true;
 }
 
@@ -250,7 +253,7 @@ node_t **last_node(node_t **node)
   return false;
 }
 
-bool tree_remove_aux(element_comp_fun key_comp, key_free_fun key_free, node_t **node_for_removal, elem_t *result)
+bool tree_remove_aux(key_free_fun key_free, node_t **node_for_removal, elem_t *result)
 {
   if((*node_for_removal)->left==NULL&&(*node_for_removal)->right==NULL)
     {
@@ -295,7 +298,7 @@ bool tree_remove(tree_t *tree, tree_key_t key, elem_t *result)
   if(tree_has_key(tree, key))
     {
       node_t **node_for_removal = get_parents_pointer(tree,key);
-      return tree_remove_aux(tree->elem_comp_fun, tree->key_free, node_for_removal, result); 
+      return tree_remove_aux(tree->key_free, node_for_removal, result); 
     }
   return false;
 }
@@ -313,7 +316,6 @@ void tree_keys_r(node_t *node, tree_key_t **result)
       
       **result = node->key;
       ++(*result); //Need to increment pointer, since we added an element
-
       tree_keys_r(node->right, result);
     }
 }

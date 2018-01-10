@@ -1,5 +1,6 @@
 #ifndef __lager_aux_h__
 #define __lager_aux_h__
+
 extern char *strdup(const char *);
 #include <stdbool.h>
 
@@ -16,11 +17,13 @@ void get_goods_for_storage_location();
 
 char ask_question_char(char *question, char *answers);
 
-//void print_goods(char *question);
+
+char *ask_question_shelf(char *question);
 
 int ask_question_int(char *question);
 
 char *ask_question_string(char *question);
 
+char *ask_question_shelf(char *question);
 
 #endif

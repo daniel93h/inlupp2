@@ -172,10 +172,10 @@ int list_length_rec_aux(link_t *link)
 
 int list_length_rec(list_t *list)
 {
-  if(list == NULL)
-    {
-      return list_length_rec_aux(list->first)
-    }
+  //if(list == NULL)
+  //  {
+      return list_length_rec_aux(list->first);
+  //  }
 }
 
 int list_length(list_t *list)
@@ -213,16 +213,8 @@ bool list_apply(list_t *list, elem_apply_fun fun, void *data)
   return true;
 }
 
+
 int list_contains(list_t *list, elem_t elem)
 {
-  return 0;
-}
-
-
-int main()
-{
-  list_t *list = list_new(NULL,NULL,NULL);
-  elem_t a = 1;
-  list_append(list, 1);
-  return 0;
+  return -1;
 }
