@@ -1,7 +1,8 @@
+#include <stdio.h>
 #include "common.h"
 #include "list.h"
 #include "list_aux.h"
-#include "tree.h"
+//#include "tree.h"
 
 #include <stdlib.h>
 
@@ -213,19 +214,32 @@ bool list_apply(list_t *list, elem_apply_fun fun, void *data)
   return true;
 }
 
-<<<<<<< HEAD
-
-int list_contains(list_t *list, elem_t elem)
-=======
 int list_contains(list_t *list, elem_t elem)
 {
   return 0;
 }
 
-/*
-int main()
->>>>>>> 681679843624030f83ab93b03b4f691ade711910
+
+
+int main(void)
 {
-  return -1;
+  list_t *new_list = list_new(NULL,NULL,NULL);
+  //  link_t *current = new_list->first;
+  //elem_t *result = current->elem;
+  int insert = 0;
+  for(int i = 0; i<5000000; ++i)
+    {
+      list_append(new_list,(elem_t)i);
+      list_prepend(new_list,(elem_t)i);
+      list_insert(new_list,insert,(elem_t)i);
+    }
+  free(new_list);
 }
-*/
+
+
+
+
+
+// gcc -Wall -pg list.c list_aux.c
+// ./a.out
+// gprof -b ./a.out gmon.out
