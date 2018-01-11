@@ -3,55 +3,58 @@ Flat profile:
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls  ns/call  ns/call  name    
- 35.40      0.06     0.06                             main
- 23.60      0.10     0.04  5000000     8.02     8.02  list_append
- 17.70      0.13     0.03  5000000     6.02     6.02  list_length_iter
- 11.80      0.15     0.02  5000000     4.01     4.01  list_prepend
-  5.90      0.16     0.01  5000000     2.01    10.03  list_insert
-  5.90      0.17     0.01  5000000     2.01     2.01  list_length
-  0.00      0.17     0.00  5000000     0.00     8.02  list_insert_edge_cases
-  0.00      0.17     0.00        1     0.00     0.00  list_new
+ 31.35      0.05     0.05  5000000    10.03    10.03  list_append
+ 18.81      0.08     0.03  5000000     6.02     6.02  list_length_iter
+ 12.54      0.10     0.02  5000000     4.01     4.01  list_length
+ 12.54      0.12     0.02  5000000     4.01     4.01  list_prepend
+ 12.54      0.14     0.02                             list_length_rec
+  6.27      0.15     0.01  5000000     2.01    14.04  list_insert
+  6.27      0.16     0.01  5000000     2.01    12.04  list_insert_edge_cases
+  0.00      0.16     0.00        1     0.00     0.00  list_new
 
 			Call graph
 
 
-granularity: each sample hit covers 2 byte(s) for 5.86% of 0.17 seconds
+granularity: each sample hit covers 2 byte(s) for 6.23% of 0.16 seconds
 
 index % time    self  children    called     name
                                                  <spontaneous>
-[1]    100.0    0.06    0.11                 main [1]
-                0.01    0.04 5000000/5000000     list_insert [2]
+[1]     87.5    0.00    0.14                 main [1]
+                0.01    0.06 5000000/5000000     list_insert [2]
                 0.03    0.00 5000000/5000000     list_length_iter [5]
-                0.02    0.00 5000000/5000000     list_prepend [6]
-                0.01    0.00 5000000/5000000     list_length [7]
-                0.00    0.00       1/1           list_new [8]
+                0.02    0.00 5000000/5000000     list_prepend [7]
+                0.02    0.00 5000000/5000000     list_length [6]
+                0.00    0.00       1/1           list_new [9]
 -----------------------------------------------
-                0.01    0.04 5000000/5000000     main [1]
-[2]     29.4    0.01    0.04 5000000         list_insert [2]
-                0.00    0.04 5000000/5000000     list_insert_edge_cases [4]
+                0.01    0.06 5000000/5000000     main [1]
+[2]     43.8    0.01    0.06 5000000         list_insert [2]
+                0.01    0.05 5000000/5000000     list_insert_edge_cases [3]
 -----------------------------------------------
-                0.04    0.00 5000000/5000000     list_insert_edge_cases [4]
-[3]     23.5    0.04    0.00 5000000         list_append [3]
+                0.01    0.05 5000000/5000000     list_insert [2]
+[3]     37.5    0.01    0.05 5000000         list_insert_edge_cases [3]
+                0.05    0.00 5000000/5000000     list_append [4]
 -----------------------------------------------
-                0.00    0.04 5000000/5000000     list_insert [2]
-[4]     23.5    0.00    0.04 5000000         list_insert_edge_cases [4]
-                0.04    0.00 5000000/5000000     list_append [3]
+                0.05    0.00 5000000/5000000     list_insert_edge_cases [3]
+[4]     31.2    0.05    0.00 5000000         list_append [4]
 -----------------------------------------------
                 0.03    0.00 5000000/5000000     main [1]
-[5]     17.6    0.03    0.00 5000000         list_length_iter [5]
+[5]     18.8    0.03    0.00 5000000         list_length_iter [5]
 -----------------------------------------------
                 0.02    0.00 5000000/5000000     main [1]
-[6]     11.8    0.02    0.00 5000000         list_prepend [6]
+[6]     12.5    0.02    0.00 5000000         list_length [6]
 -----------------------------------------------
-                0.01    0.00 5000000/5000000     main [1]
-[7]      5.9    0.01    0.00 5000000         list_length [7]
+                0.02    0.00 5000000/5000000     main [1]
+[7]     12.5    0.02    0.00 5000000         list_prepend [7]
+-----------------------------------------------
+                                                 <spontaneous>
+[8]     12.5    0.02    0.00                 list_length_rec [8]
 -----------------------------------------------
                 0.00    0.00       1/1           main [1]
-[8]      0.0    0.00    0.00       1         list_new [8]
+[9]      0.0    0.00    0.00       1         list_new [9]
 -----------------------------------------------
 
 Index by function name
 
-   [3] list_append             [7] list_length             [6] list_prepend
-   [2] list_insert             [5] list_length_iter        [1] main
-   [4] list_insert_edge_cases  [8] list_new
+   [4] list_append             [6] list_length             [9] list_new
+   [2] list_insert             [5] list_length_iter        [7] list_prepend
+   [3] list_insert_edge_cases  [8] list_length_rec

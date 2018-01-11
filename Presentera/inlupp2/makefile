@@ -1,5 +1,5 @@
 run:	clean
-	gcc -Wall -g -v *.c
+	gcc -Wall -g  *.c
 	./a.out Lagersaldo
 
 comp:	clean
