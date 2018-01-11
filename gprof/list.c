@@ -226,14 +226,23 @@ int main(void)
   list_t *new_list = list_new(NULL,NULL,NULL);
   //  link_t *current = new_list->first;
   //elem_t *result = current->elem;
-  int insert = 0;
+  //  int insert = 0;
   for(int i = 0; i<5000000; ++i)
     {
-      list_append(new_list,(elem_t)i);
       list_prepend(new_list,(elem_t)i);
-      list_insert(new_list,insert,(elem_t)i);
     }
-  free(new_list);
+  for(int i = 0; i<5000000; ++i)
+    {
+      list_insert(new_list,-1,(elem_t)i);
+    }
+  for(int i = 0; i<5000000; ++i)
+    {
+      list_length(new_list);
+    }
+  for(int i = 0; i<5000000; ++i)
+    {
+      list_length_iter(new_list);
+    }
 }
 
 

@@ -311,10 +311,40 @@ bool tree_insert(tree_t *tree, tree_key_t key, elem_t elem)
 
 }
 
+node_t **get_parents_pointer_r(node_t **parents_pointer, elem_t *key, element_comp_fun compare)
+{
+  if(*parents_pointer == NULL)
+    {
+      return parents_pointer;
+    }
+  int comp = compare(*key, (*parents_pointer)->key);
+  if(comp<0)
+    {
+      return get_parents_pointer_r(&((*parents_pointer)->left),key,compare);
+    }
+  else if(comp>0)
+    {
+      return get_parents_pointer_r(&((*parents_pointer)->right), key, compare);
+    }
+  else
+    {
+      return parents_pointer;
+    }
+}
+
+node_t **get_parents_pointer(tree_t *tree, elem_t key)
+{
+  return get_parents_pointer_r(&(tree->root), &key,tree->compare);
+}
+
+bool tree_has_key(tree_t *tree, tree_key_t key)
+{
+  node_t *node_pointer = *get_parents_pointer(tree,key);
+  return (node_pointer != NULL);
+}
 
 
-
-bool find_key_aux(node_t *node, tree_key_t key, tree_t *tree)
+/*bool find_key_aux(node_t *node, tree_key_t key, tree_t *tree)
 {
   if(node == NULL)
     {
@@ -362,7 +392,7 @@ bool tree_has_key(tree_t *tree, tree_key_t key)
 {
  return find_key_aux(tree->root, key, tree);
 
-}
+ }*/
 
 bool get_elem_aux(node_t *node, tree_key_t key, elem_t *result, element_comp_fun compare)
 {

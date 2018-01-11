@@ -210,7 +210,6 @@ item_t *make_item(char *name, char *description, int price, char *shelf_name, in
 
 item_t *input_item(tree_t *tree, char *name)
 {
-
   elem_t result;
   elem_t elem = { .p = name};
   elem_t elem1;
