@@ -262,7 +262,6 @@ void want_to_add_to_db_loop(tree_t *tree, item_t *item)
           elem_t elem = { .p = item};
           
           tree_insert(tree, key, elem);
-          
           puts("----------------------------------------------");
           puts("The item above is now stored in the database\n");
           puts("----------------------------------------------");
@@ -834,7 +833,7 @@ void event_loop(tree_t *tree, char *filename)
 
 
     save_tree(tree, filename);
-    tree_delete(tree, false, true);
+    tree_delete(tree, true, true);
     loop = false;
   }
 

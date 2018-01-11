@@ -1,5 +1,5 @@
 run:	clean
-	gcc -Wall *.c
+	gcc -Wall -g -v *.c
 	./a.out Lagersaldo
 
 comp:	clean
@@ -10,4 +10,4 @@ clean:
 	rm -f *.out
 
 memtest: comp
-	valgrind --leak-check=full ./a.out Lagersaldo
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./a.out Lagersaldo
